@@ -1,0 +1,89 @@
+{% extends "base.njk" %}
+
+{% block title %}Web Seek{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/css/index.css">
+{% endblock %}
+
+{% block content %}
+<div id="welcome-popup" class="popup-overlay" style="display: none;">
+  <div class="popup-content">
+    <h2>Welcome to Web Seek</h2>
+    <p>Web Seek is a private and secure search engine that respects your privacy. No tracking, no ads, no accounts, just search. <br><br> Searches made using Web Seek will not show up in your browser history.</p>
+    <button id="popup-dismiss" class="popup-button">Do not show again</button>
+  </div>
+</div>
+
+<div class="container" id="home-container">
+  <h1>Web Seek</h1>
+  <p class="subtitle">By <a href="https://queerweb.org/">QueerWeb</a></p>
+  <form class="search-form" id="search-form">
+    <input type="text" name="q" class="search-input" id="search-input" placeholder="Search the web..." autocomplete="off">
+    <button type="submit" class="search-button">Search</button>
+  </form>
+</div>
+<div id="loading-container" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--base); justify-content: center; align-items: center;">
+  <p style="color: var(--text); font-size: 1.5rem;">Loading...</p>
+</div>
+<iframe id="search-iframe" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none;"></iframe>
+
+<script src="/js/autocomplete.js"></script>
+<script>
+  (function() {
+    if (!localStorage.getItem('seek-popup-dismissed')) {
+      document.getElementById('welcome-popup').style.display = 'flex';
+    }
+    document.getElementById('popup-dismiss').addEventListener('click', function() {
+      localStorage.setItem('seek-popup-dismissed', 'true');
+      document.getElementById('welcome-popup').style.display = 'none';
+    });
+  })();
+</script>
+<script>
+  initAutocomplete('#search-input', '#search-form', function(query) {
+    if (query.trim()) {
+      document.getElementById('home-container').style.display = 'none';
+      const loadingContainer = document.getElementById('loading-container');
+      const iframe = document.getElementById('search-iframe');
+      loadingContainer.style.display = 'flex';
+      iframe.style.display = 'none';
+      iframe.src = 'about:blank';
+      iframe.onload = function() {
+        if (iframe.src !== 'about:blank') {
+          loadingContainer.style.display = 'none';
+          iframe.style.display = 'block';
+        }
+      };
+      setTimeout(function() {
+        iframe.src = '/search?q=' + encodeURIComponent(query) + '&_t=' + Date.now();
+      }, 0);
+    }
+  });
+
+  document.getElementById('search-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const query = document.getElementById('search-input').value.trim();
+    if (query) {
+      document.getElementById('home-container').style.display = 'none';
+      const loadingContainer = document.getElementById('loading-container');
+      const iframe = document.getElementById('search-iframe');
+      
+      loadingContainer.style.display = 'flex';
+      iframe.style.display = 'none';
+      iframe.src = 'about:blank';
+      
+      iframe.onload = function() {
+        if (iframe.src !== 'about:blank') {
+          loadingContainer.style.display = 'none';
+          iframe.style.display = 'block';
+        }
+      };
+      
+      setTimeout(function() {
+        iframe.src = '/search?q=' + encodeURIComponent(query) + '&_t=' + Date.now();
+      }, 0);
+    }
+  });
+</script>
+{% endblock %}

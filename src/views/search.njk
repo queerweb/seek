@@ -1,0 +1,44 @@
+{% extends "base.njk" %}
+
+{% block title %}{{ query }} - Seek{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/css/search.css">
+{% endblock %}
+
+{% block content %}
+<div class="page">
+  <header class="header">
+    <a href="/" class="logo" onclick="if (window.self !== window.top) { window.top.location.reload(); return false; }">Seek</a>
+    <form class="header-search" action="/search" method="GET">
+      <input type="text" name="q" class="search-input" placeholder="Search the web..." value="{{ query }}" autocomplete="off">
+      <button type="submit" class="search-button">Search</button>
+    </form>
+  </header>
+
+  <main class="results-page">
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% elif results.length === 0 %}
+    <div class="no-results">No results found for "{{ query }}"</div>
+    {% else %}
+    <div class="results">
+      {% for result in results %}
+      <article class="result">
+        <a href="{{ result.url }}" class="result-link" target="_blank" rel="noopener">
+          <cite class="result-url">{{ result.url }}</cite>
+          <h2 class="result-title">{{ result.title }}</h2>
+        </a>
+        <p class="result-description">{{ result.description | sanitize | safe }}</p>
+      </article>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </main>
+</div>
+
+<script src="/js/autocomplete.js"></script>
+<script>
+  initAutocomplete('.header-search .search-input', '.header-search');
+</script>
+{% endblock %}

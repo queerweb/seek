@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Seek - Private Search",
+  "version": "1.0.0",
+  "description": "Set Seek as your default search engine for private and secure searching.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_popup": "popup.html",
+    "default_title": "Seek Search"
+  },
+  "chrome_settings_overrides": {
+    "search_provider": {
+      "name": "Seek",
+      "keyword": "seek",
+      "search_url": "https://seek.gay/search?q={searchTerms}",
+      "favicon_url": "https://seek.gay/favicon.svg",
+      "is_default": true
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "seek@seek.gay",
+      "strict_min_version": "57.0"
+    }
+  },
+  "permissions": []
+}
