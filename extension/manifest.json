@@ -22,7 +22,7 @@
       "name": "Seek",
       "keyword": "seek",
       "search_url": "https://seek.gay/search?q={searchTerms}",
-      "favicon_url": "https://seek.gay/favicon.svg",
+      "favicon_url": "icons/icon128.png",
       "is_default": true
     }
   },
